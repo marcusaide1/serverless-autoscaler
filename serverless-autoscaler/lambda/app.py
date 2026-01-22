@@ -1,0 +1,19 @@
+import json
+import datetime
+
+def lambda_handler(event, context):
+    print(f"Received event: {json.dumps(event)}")
+    
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Check if triggered by API Gateway or EventBridge
+    trigger = "EventBridge (Schedule)"
+    if "httpMethod" in event:
+        trigger = f"API Gateway ({event['httpMethod']} request)"
+
+    message = f"Hello! This Serverless function was triggered by {trigger} at {current_time}."
+
+    return {
+        'statusCode': 200,
+        'body': json.dumps({'message': message})
+    }
